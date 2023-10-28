@@ -67,8 +67,23 @@ prompts more straightforward. We will see this in action for a little bit.
 > part of the language and also required in script based use.
 
 ### Baby Language
-As an example, let's define a very basic baby language. We start by defining
-consonants and vowels (`C` and `V`) respectively.
+In the interactive, each *statement* will be concluded with a period (`.`).
+So in a session were we specify a very basic language with `C` and `V` this
+woiuld resemble the following.
+```
+hwk> C : o/u;
+     V : k/p;
+     .
+C
+V
+```
+
+In the above example we specify two definitions (`C` and `V`) and then tell the
+interactive that we are done by specifying the period (`.`). We are then told
+`C` and `V` which is a sign that the interactive has recorded our definitions.
+
+As another example, let's define a very basic baby language. We start by 
+defining consonants and vowels (`C` and `V`) respectively.
 ```
 hwk> C: k/g/w/b/p;
      V: a/i/u;
