@@ -41,7 +41,22 @@ public class Interpreter : HawkBaseVisitor<string>
         this.env[key] = value;
         return string.Empty;
     }
-    
+
+    public override string VisitParens(HawkParser.ParensContext context)
+    {
+        var roll = this.rng.NextDouble();
+        if (roll < 0.5)
+        {
+            return string.Empty;
+        }
+
+        var buf = new StringBuilder();
+        Array.ForEach(
+            context.pattern(),
+            pat => buf.Append(pat.Accept(this)));
+        return buf.ToString();
+    }
+
     public override string VisitBrackets(HawkParser.BracketsContext context)
     {
         var buf = new StringBuilder();
