@@ -1,12 +1,38 @@
-﻿using System.Text;
+﻿namespace Hawk;
 
-namespace Hawk;
+using System.Text;
 
 public class Interpreter : HawkBaseVisitor<string>
 {
+    /// <summary>
+    /// Random number generator.
+    /// </summary>
+    /// <remarks>
+    /// This generator is used to evaluate parens and token lists where
+    /// a dynamic (random) choice needs to be made.
+    /// </remarks>
     private readonly Random rng;
+    
+    /// <summary>
+    /// The environment of predefined sub-patterns.
+    /// </summary>
+    /// <remarks>
+    /// Sub-patterns are just patterns but they are associated with a
+    /// single capital letter (their identifier). Akin to a variable they
+    /// can be re-used in other patterns.
+    /// </remarks>
     private readonly IDictionary<string, HawkParser.PatternContext> env;
 
+    /// <summary>
+    /// Constructs a new <see cref="Interpreter"/> instance.
+    /// </summary>
+    /// <param name="env">The sub-pattern environment.</param>
+    /// <remarks>
+    /// <p>Since the host is almost involved in manipulating the
+    /// sub-pattern environment, it is best if it is passed along.</p>
+    /// <p>In the future there will probably be an improved host interface as
+    /// well as an abstraction for the random number generator.</p> 
+    /// </remarks>
     public Interpreter(IDictionary<string, HawkParser.PatternContext> env)
         : this(new Random(), env)
     {
@@ -35,7 +61,6 @@ public class Interpreter : HawkBaseVisitor<string>
 
     public override string VisitDef(HawkParser.DefContext context)
     {
-        Console.WriteLine("DEF");
         var key = context.ID().GetText();
         var value = context.pattern();
         this.env[key] = value;
@@ -66,10 +91,26 @@ public class Interpreter : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
+    public override string VisitTok(HawkParser.TokContext context)
+    {
+        return context.ID() is null
+            ? context.TEXT().GetText()
+            : this
+                .env[context.ID().GetText()]
+                .Accept(this);
+    }
+
     public override string VisitToklist(
         HawkParser.ToklistContext context)
     {
-        IEnumerable<HawkParser.TokContext> DuplicateTokens(
+        // There is a certain weight for each token to be generated, with
+        // the default being one. The algorithm below works as follows:\
+        // 
+        // 1. For each token:
+
+        // 1.1 Try to parse its *num* value (set num = 1 by otherwise/default)
+        // 1.2 Generate list of *num* number of tokens (references)
+        static IEnumerable<HawkParser.TokContext> Dup(
             HawkParser.TokContext tc)
         {
             int num;
@@ -87,14 +128,16 @@ public class Interpreter : HawkBaseVisitor<string>
                 .Select(_ => tc);
         }
 
+        // 2. Concatenate all generated lists into a flat list
+        // 3. Shuffle this list by ordering by a random number
+        // 4. Take the token at the head of the list
         var tok = context
             .tok()
-            .SelectMany(DuplicateTokens)
+            .SelectMany(Dup)
             .OrderBy(_ => rng.Next())
             .First();
 
-        return tok.ID() is null
-            ? tok.TEXT().GetText()
-            : this.env[tok.ID().GetText()].Accept(this);
+        // 5. Send the selected token to the interpreter.
+        return tok.Accept(this);
     }
 }

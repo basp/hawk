@@ -28,7 +28,6 @@ using IToken = Antlr4.Runtime.IToken;
 /// <see cref="HawkParser"/>.
 /// </summary>
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
-[System.CLSCompliant(false)]
 public interface IHawkListener : IParseTreeListener {
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="HawkParser.root"/>.

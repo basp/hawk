@@ -29,7 +29,6 @@ using IToken = Antlr4.Runtime.IToken;
 /// </summary>
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
-[System.CLSCompliant(false)]
 public interface IHawkVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.root"/>.

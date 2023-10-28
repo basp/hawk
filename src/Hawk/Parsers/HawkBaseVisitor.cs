@@ -32,7 +32,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 /// <typeparam name="Result">The return type of the visit operation.</typeparam>
 [System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.12.0")]
 [System.Diagnostics.DebuggerNonUserCode]
-[System.CLSCompliant(false)]
 public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, IHawkVisitor<Result> {
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.root"/>.
