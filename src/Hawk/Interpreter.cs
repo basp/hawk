@@ -5,6 +5,11 @@ using System.Text;
 public class Interpreter : HawkBaseVisitor<string>
 {
     /// <summary>
+    /// A client that is hosting the interpreter.
+    /// </summary>
+    private readonly IHost host;
+    
+    /// <summary>
     /// Random number generator.
     /// </summary>
     /// <remarks>
@@ -33,25 +38,35 @@ public class Interpreter : HawkBaseVisitor<string>
     /// <p>In the future there will probably be an improved host interface as
     /// well as an abstraction for the random number generator.</p> 
     /// </remarks>
-    public Interpreter(IDictionary<string, HawkParser.PatternContext> env)
-        : this(new Random(), env)
+    public Interpreter(
+        IHost host,
+        IDictionary<string, HawkParser.PatternContext> env)
+        : this(new Random(), host, env)
     {
     }
 
     private Interpreter(
         Random rng, 
+        IHost host,
         IDictionary<string, HawkParser.PatternContext> env)
     {
         this.rng = rng;
+        this.host = host;
         this.env = env;
     }
 
+    /// <summary>
+    /// Visit a <strong>Hawk</strong> root expression. A root program which
+    /// contains zero or more definitions and zero or more generator
+    /// expressions.
+    /// </summary>
+    /// <param name="context">The root node context.</param>
+    /// <returns>A string translated from the root expression.</returns>
     public override string VisitRoot(HawkParser.RootContext context)
     {
         Array.ForEach(
             context.def(),
             pat => pat.Accept(this));
-        
         var buf = new StringBuilder();
         Array.ForEach(
             context.pattern(),
@@ -59,14 +74,31 @@ public class Interpreter : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
+    /// <summary>
+    /// Evaluates a definition and stores it in the local environment.
+    /// </summary>
+    /// <param name="context">The definition node context.</param>
+    /// <returns>An empty string.</returns>
+    /// <remarks>
+    /// This stores a definition in the local environment. It has no result.
+    /// </remarks>
     public override string VisitDef(HawkParser.DefContext context)
     {
         var key = context.ID().GetText();
         var value = context.pattern();
         this.env[key] = value;
+        this.host.WriteLine(key);
         return string.Empty;
     }
 
+    /// <summary>
+    /// Evaluates a parenthesized expression.
+    /// </summary>
+    /// <param name="context">The expression in parenthesized context.</param>
+    /// <returns>
+    /// A string representing the result of evaluating the parenthesized
+    /// context.
+    /// </returns>
     public override string VisitParens(HawkParser.ParensContext context)
     {
         var roll = this.rng.NextDouble();
@@ -82,6 +114,13 @@ public class Interpreter : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
+    /// <summary>
+    /// Evaluates a bracketed expression.
+    /// </summary>
+    /// <param name="context">The expression in bracketed context.</param>
+    /// <returns>
+    /// A string representing the result of evaluating the bracketed context.
+    /// </returns>
     public override string VisitBrackets(HawkParser.BracketsContext context)
     {
         var buf = new StringBuilder();
@@ -90,7 +129,7 @@ public class Interpreter : HawkBaseVisitor<string>
             pat => buf.Append(pat.Accept(this)));
         return buf.ToString();
     }
-
+    
     public override string VisitTok(HawkParser.TokContext context)
     {
         return context.ID() is null
@@ -113,6 +152,8 @@ public class Interpreter : HawkBaseVisitor<string>
         static IEnumerable<HawkParser.TokContext> Dup(
             HawkParser.TokContext tc)
         {
+            // Assume the number of tokens is one whatever happens.
+            // Whether its available or we can parse it or not.
             int num;
             if (tc.NUM() is null)
             {
@@ -123,6 +164,9 @@ public class Interpreter : HawkBaseVisitor<string>
                 num = 1;
             }
 
+            // Clone references according to their weight.
+            // This will be flat-mapped later. This should always yield
+            // one result (i.e. `num >= 1` at this point).
             return Enumerable
                 .Range(0, num)
                 .Select(_ => tc);
