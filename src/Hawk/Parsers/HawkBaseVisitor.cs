@@ -45,7 +45,7 @@ public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// <return>The visitor result.</return>
 	public virtual Result VisitRoot([NotNull] HawkParser.RootContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.sub"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.def"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -53,7 +53,7 @@ public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitSub([NotNull] HawkParser.SubContext context) { return VisitChildren(context); }
+	public virtual Result VisitDef([NotNull] HawkParser.DefContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.pattern"/>.
 	/// <para>
@@ -65,7 +65,7 @@ public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// <return>The visitor result.</return>
 	public virtual Result VisitPattern([NotNull] HawkParser.PatternContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.pgroup"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -73,9 +73,9 @@ public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitPgroup([NotNull] HawkParser.PgroupContext context) { return VisitChildren(context); }
+	public virtual Result VisitParens([NotNull] HawkParser.ParensContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.bgroup"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.brackets"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -83,7 +83,7 @@ public partial class HawkBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitBgroup([NotNull] HawkParser.BgroupContext context) { return VisitChildren(context); }
+	public virtual Result VisitBrackets([NotNull] HawkParser.BracketsContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.toklist"/>.
 	/// <para>

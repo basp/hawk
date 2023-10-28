@@ -2,22 +2,24 @@
 using Antlr4.Runtime;
 using Hawk;
 
-var example = @"
+const string example = @"
     V : o/i/u                   ;
     C : k/p/b/m/n               ;
     N : m/n                     ;
     (C)V(V)(C)V[ta/toa](V)(N)
 ";
 
-var env = new Dictionary<string, HawkParser.PatternContext>();
-
-
 const string prompt = "> ";
+
+const int count = 50;
+
+var env = new Dictionary<string, HawkParser.PatternContext>();
 
 while (true)
 {
     var buf = new StringBuilder();
     Console.Write(prompt);
+    
     while (true)
     {
         var input = Console.ReadLine();
@@ -27,8 +29,7 @@ while (true)
         }
 
         buf.Append(input.TrimEnd('.'));
-
-        if (input.TrimEnd().EndsWith('.'))
+        if (input.EndsWith('.'))
         {
             break;
         }
@@ -41,11 +42,10 @@ while (true)
     var tokens = new CommonTokenStream(lexer);
     var parser = new HawkParser(tokens);
     var ctx = parser.root();
-    var visitor = new TestVisitor(env);
-
-    for (var n = 0; n < 5; n++)
+    var interpreter = new Interpreter(env);
+    var s = ctx.Accept(interpreter);
+    if (!string.IsNullOrWhiteSpace(s))
     {
-        var s = ctx.Accept(visitor);
         Console.WriteLine(s);
     }
 }

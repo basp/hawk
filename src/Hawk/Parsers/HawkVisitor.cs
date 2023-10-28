@@ -38,11 +38,11 @@ public interface IHawkVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitRoot([NotNull] HawkParser.RootContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.sub"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.def"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitSub([NotNull] HawkParser.SubContext context);
+	Result VisitDef([NotNull] HawkParser.DefContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.pattern"/>.
 	/// </summary>
@@ -50,17 +50,17 @@ public interface IHawkVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitPattern([NotNull] HawkParser.PatternContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.pgroup"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitPgroup([NotNull] HawkParser.PgroupContext context);
+	Result VisitParens([NotNull] HawkParser.ParensContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="HawkParser.bgroup"/>.
+	/// Visit a parse tree produced by <see cref="HawkParser.brackets"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitBgroup([NotNull] HawkParser.BgroupContext context);
+	Result VisitBrackets([NotNull] HawkParser.BracketsContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.toklist"/>.
 	/// </summary>

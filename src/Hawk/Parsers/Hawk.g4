@@ -1,18 +1,18 @@
 grammar Hawk;
 
-root        : sub* pattern+ ;
+root        : def* pattern* ;
 
-sub         : ID ':' pattern ';' ;
+def         : ID ':' pattern ';' ;
 
 pattern     : toklist
-            | pgroup   
-            | bgroup
+            | parens   
+            | brackets
             | ESC
             ;
 
-pgroup      : '(' pattern+ ')' filter* 
+parens      : '(' pattern+ ')' filter* 
             ;
-bgroup      : '[' pattern+ ']' filter* 
+brackets    : '[' pattern+ ']' filter* 
             ;
 toklist     : tok ('/' tok)* 
             ;

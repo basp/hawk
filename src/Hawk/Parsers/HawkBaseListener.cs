@@ -48,17 +48,17 @@ public partial class HawkBaseListener : IHawkListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitRoot([NotNull] HawkParser.RootContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="HawkParser.sub"/>.
+	/// Enter a parse tree produced by <see cref="HawkParser.def"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterSub([NotNull] HawkParser.SubContext context) { }
+	public virtual void EnterDef([NotNull] HawkParser.DefContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="HawkParser.sub"/>.
+	/// Exit a parse tree produced by <see cref="HawkParser.def"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitSub([NotNull] HawkParser.SubContext context) { }
+	public virtual void ExitDef([NotNull] HawkParser.DefContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="HawkParser.pattern"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -72,29 +72,29 @@ public partial class HawkBaseListener : IHawkListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitPattern([NotNull] HawkParser.PatternContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="HawkParser.pgroup"/>.
+	/// Enter a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterPgroup([NotNull] HawkParser.PgroupContext context) { }
+	public virtual void EnterParens([NotNull] HawkParser.ParensContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="HawkParser.pgroup"/>.
+	/// Exit a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitPgroup([NotNull] HawkParser.PgroupContext context) { }
+	public virtual void ExitParens([NotNull] HawkParser.ParensContext context) { }
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="HawkParser.bgroup"/>.
+	/// Enter a parse tree produced by <see cref="HawkParser.brackets"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void EnterBgroup([NotNull] HawkParser.BgroupContext context) { }
+	public virtual void EnterBrackets([NotNull] HawkParser.BracketsContext context) { }
 	/// <summary>
-	/// Exit a parse tree produced by <see cref="HawkParser.bgroup"/>.
+	/// Exit a parse tree produced by <see cref="HawkParser.brackets"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
-	public virtual void ExitBgroup([NotNull] HawkParser.BgroupContext context) { }
+	public virtual void ExitBrackets([NotNull] HawkParser.BracketsContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="HawkParser.toklist"/>.
 	/// <para>The default implementation does nothing.</para>

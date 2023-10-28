@@ -4,7 +4,7 @@ namespace Hawk;
 
 using System.Linq;
 
-public class TestVisitor : HawkBaseVisitor<string>
+public class TestVisitor
 {
     private static readonly Random rng = new();
 
@@ -15,14 +15,14 @@ public class TestVisitor : HawkBaseVisitor<string>
         this.env = env;
     }
 
-    public override string VisitSub(HawkParser.SubContext context)
+    public string VisitSub(HawkParser.SubContext context)
     {
         var key = context.ID().GetText();
         this.env[key] = context.pattern();
         return string.Empty;
     }
 
-    public override string VisitRoot(HawkParser.RootContext context)
+    public string VisitRoot(HawkParser.RootContext context)
     {
         foreach (var sub in context.sub())
         {
@@ -38,7 +38,7 @@ public class TestVisitor : HawkBaseVisitor<string>
         return s.ToString();
     }
 
-    public override string VisitBgroup(HawkParser.BgroupContext context)
+    public string VisitBgroup(HawkParser.BgroupContext context)
     {
         var buf = new StringBuilder();
         Array.ForEach(
@@ -47,7 +47,7 @@ public class TestVisitor : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
-    public override string VisitPgroup(HawkParser.PgroupContext context)
+    public string VisitPgroup(HawkParser.PgroupContext context)
     {
         var roll = rng.NextDouble();
         if (roll <= 0.5)
@@ -62,7 +62,7 @@ public class TestVisitor : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
-    public override string VisitToklist(HawkParser.ToklistContext context)
+    public string VisitToklist(HawkParser.ToklistContext context)
     {
         var tok = context
             .tok()
