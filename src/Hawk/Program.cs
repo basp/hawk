@@ -1,13 +1,14 @@
 ﻿namespace  Hawk;
 
+using System.CommandLine;
 using System.Text;
 using Antlr4.Runtime;
 
-internal class Program : IHost
+internal class Program
 {
     private const string prompt = "hwk> ";
 
-    private void Run()
+    private static void RunInteractive()
     {
         var env = new Dictionary<string, HawkParser.PatternContext>();
 
@@ -56,7 +57,8 @@ internal class Program : IHost
             var tokens = new CommonTokenStream(lexer);
             var parser = new HawkParser(tokens);
             var ctx = parser.root();
-            var interpreter = new Interpreter(this, env);
+            var host = new ConsoleHost();
+            var interpreter = new Interpreter(host, env);
             var s = ctx.Accept(interpreter);
 
             if (!string.IsNullOrWhiteSpace(s))
@@ -65,21 +67,74 @@ internal class Program : IHost
             }
         }
     }
-    
-    public static void Main(string[] args)
+
+    private static IEnumerable<string> Generate(FileSystemInfo file, int count)
     {
-        var p = new Program();
-        p.Run();
+        var stream = new AntlrFileStream(file.FullName);
+        var lexer = new HawkLexer(stream);
+        var tokens = new CommonTokenStream(lexer);
+        var parser = new HawkParser(tokens);
+        var ctx = parser.root();
+        var host = new NullHost();
+        var env = new Dictionary<string, HawkParser.PatternContext>();
+        var interpreter = new Interpreter(host, env);
+        return Enumerable
+            .Range(0, count)
+            .Select(_ => ctx.Accept(interpreter));
     }
 
-    public void Write(string s)
+    public static async Task<int> Main(string[] args)
     {
-        Console.Write(s);
+        var fileArgument = new Argument<FileInfo?>();
+        var countOption = new Option<int>(
+            "--count", 
+            () => 10);
+        var generateCommand = new Command(
+            "generate",
+            "Generates words from a definition file.");
+        generateCommand.AddArgument(fileArgument);
+        generateCommand.AddOption(countOption);
+        generateCommand.SetHandler(
+            (file, count) =>
+            {
+                var words = Generate(file!, count)
+                    .ToHashSet()
+                    .Order()
+                    .ToArray();
+                var output = string.Join(" ", words);
+                Console.WriteLine(output);
+            }, 
+            fileArgument, 
+            countOption);
+        
+        var rootCommand = new RootCommand(
+            "Execute a Hawk command.");
+        rootCommand.AddCommand(generateCommand);
+        rootCommand.SetHandler(RunInteractive);
+        return await rootCommand.InvokeAsync(args);
     }
 
-    public void WriteLine(string s)
+    private class NullHost : IHost
     {
-        Console.WriteLine(s);
+        public void Write(string s)
+        {
+        }
+
+        public void WriteLine(string s)
+        {
+        }
+    }
+
+    private class ConsoleHost : IHost
+    {
+        public void Write(string s)
+        {
+            Console.Write(s);
+        }
+
+        public void WriteLine(string s)
+        {
+            Console.WriteLine(s);
+        }
     }
 }
-

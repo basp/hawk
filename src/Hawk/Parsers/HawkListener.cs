@@ -60,6 +60,16 @@ public interface IHawkListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitPattern([NotNull] HawkParser.PatternContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="HawkParser.escaped"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterEscaped([NotNull] HawkParser.EscapedContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="HawkParser.escaped"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitEscaped([NotNull] HawkParser.EscapedContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

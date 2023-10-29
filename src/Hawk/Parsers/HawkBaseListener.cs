@@ -71,6 +71,18 @@ public partial class HawkBaseListener : IHawkListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitPattern([NotNull] HawkParser.PatternContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="HawkParser.escaped"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterEscaped([NotNull] HawkParser.EscapedContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="HawkParser.escaped"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitEscaped([NotNull] HawkParser.EscapedContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

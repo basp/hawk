@@ -36,19 +36,21 @@ public partial class HawkParser : Parser {
 	protected static PredictionContextCache sharedContextCache = new PredictionContextCache();
 	public const int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		ESC=10, NUM=11, ID=12, TEXT=13, WS=14;
+		T__9=10, NUM=11, ID=12, TEXT=13, WS=14;
 	public const int
-		RULE_root = 0, RULE_def = 1, RULE_pattern = 2, RULE_parens = 3, RULE_brackets = 4, 
-		RULE_toklist = 5, RULE_tok = 6, RULE_filter = 7;
+		RULE_root = 0, RULE_def = 1, RULE_pattern = 2, RULE_escaped = 3, RULE_parens = 4, 
+		RULE_brackets = 5, RULE_toklist = 6, RULE_tok = 7, RULE_filter = 8;
 	public static readonly string[] ruleNames = {
-		"root", "def", "pattern", "parens", "brackets", "toklist", "tok", "filter"
+		"root", "def", "pattern", "escaped", "parens", "brackets", "toklist", 
+		"tok", "filter"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, "':'", "';'", "'('", "')'", "'['", "']'", "'/'", "'*'", "'^'"
+		null, "':'", "';'", "'\"'", "'('", "')'", "'['", "']'", "'/'", "'*'", 
+		"'^'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, null, null, null, null, null, null, null, null, null, "ESC", "NUM", 
+		null, null, null, null, null, null, null, null, null, null, null, "NUM", 
 		"ID", "TEXT", "WS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
@@ -128,33 +130,33 @@ public partial class HawkParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 19;
+			State = 21;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,0,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 16;
+					State = 18;
 					def();
 					}
 					} 
 				}
-				State = 21;
+				State = 23;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,0,Context);
 			}
-			State = 25;
+			State = 27;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 13352L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12376L) != 0)) {
 				{
 				{
-				State = 22;
+				State = 24;
 				pattern();
 				}
 				}
-				State = 27;
+				State = 29;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -206,13 +208,13 @@ public partial class HawkParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 28;
-			Match(ID);
-			State = 29;
-			Match(T__0);
 			State = 30;
-			pattern();
+			Match(ID);
 			State = 31;
+			Match(T__0);
+			State = 32;
+			pattern();
+			State = 33;
 			Match(T__1);
 			}
 		}
@@ -237,7 +239,9 @@ public partial class HawkParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BracketsContext brackets() {
 			return GetRuleContext<BracketsContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode ESC() { return GetToken(HawkParser.ESC, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public EscapedContext escaped() {
+			return GetRuleContext<EscapedContext>(0);
+		}
 		public PatternContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -266,40 +270,105 @@ public partial class HawkParser : Parser {
 		PatternContext _localctx = new PatternContext(Context, State);
 		EnterRule(_localctx, 4, RULE_pattern);
 		try {
-			State = 37;
+			State = 39;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case ID:
 			case TEXT:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 33;
+				State = 35;
 				toklist();
 				}
 				break;
-			case T__2:
+			case T__3:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 34;
+				State = 36;
 				parens();
 				}
 				break;
-			case T__4:
+			case T__5:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 35;
+				State = 37;
 				brackets();
 				}
 				break;
-			case ESC:
+			case T__2:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 36;
-				Match(ESC);
+				State = 38;
+				escaped();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class EscapedContext : ParserRuleContext {
+		public EscapedContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_escaped; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void EnterRule(IParseTreeListener listener) {
+			IHawkListener typedListener = listener as IHawkListener;
+			if (typedListener != null) typedListener.EnterEscaped(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override void ExitRule(IParseTreeListener listener) {
+			IHawkListener typedListener = listener as IHawkListener;
+			if (typedListener != null) typedListener.ExitEscaped(this);
+		}
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IHawkVisitor<TResult> typedVisitor = visitor as IHawkVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEscaped(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public EscapedContext escaped() {
+		EscapedContext _localctx = new EscapedContext(Context, State);
+		EnterRule(_localctx, 6, RULE_escaped);
+		try {
+			int _alt;
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 41;
+			Match(T__2);
+			State = 45;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
+			while ( _alt!=1 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1+1 ) {
+					{
+					{
+					State = 42;
+					MatchWildcard();
+					}
+					} 
+				}
+				State = 47;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,3,Context);
+			}
+			State = 48;
+			Match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -352,40 +421,40 @@ public partial class HawkParser : Parser {
 	[RuleVersion(0)]
 	public ParensContext parens() {
 		ParensContext _localctx = new ParensContext(Context, State);
-		EnterRule(_localctx, 6, RULE_parens);
+		EnterRule(_localctx, 8, RULE_parens);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 39;
-			Match(T__2);
-			State = 41;
+			State = 50;
+			Match(T__3);
+			State = 52;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 40;
+				State = 51;
 				pattern();
 				}
 				}
-				State = 43;
+				State = 54;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 13352L) != 0) );
-			State = 45;
-			Match(T__3);
-			State = 49;
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 12376L) != 0) );
+			State = 56;
+			Match(T__4);
+			State = 60;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__8) {
+			while (_la==T__9) {
 				{
 				{
-				State = 46;
+				State = 57;
 				filter();
 				}
 				}
-				State = 51;
+				State = 62;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -441,40 +510,40 @@ public partial class HawkParser : Parser {
 	[RuleVersion(0)]
 	public BracketsContext brackets() {
 		BracketsContext _localctx = new BracketsContext(Context, State);
-		EnterRule(_localctx, 8, RULE_brackets);
+		EnterRule(_localctx, 10, RULE_brackets);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 52;
-			Match(T__4);
-			State = 54;
+			State = 63;
+			Match(T__5);
+			State = 65;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 53;
+				State = 64;
 				pattern();
 				}
 				}
-				State = 56;
+				State = 67;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 13352L) != 0) );
-			State = 58;
-			Match(T__5);
-			State = 62;
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 12376L) != 0) );
+			State = 69;
+			Match(T__6);
+			State = 73;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__8) {
+			while (_la==T__9) {
 				{
 				{
-				State = 59;
+				State = 70;
 				filter();
 				}
 				}
-				State = 64;
+				State = 75;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -524,26 +593,26 @@ public partial class HawkParser : Parser {
 	[RuleVersion(0)]
 	public ToklistContext toklist() {
 		ToklistContext _localctx = new ToklistContext(Context, State);
-		EnterRule(_localctx, 10, RULE_toklist);
+		EnterRule(_localctx, 12, RULE_toklist);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 65;
+			State = 76;
 			tok();
-			State = 70;
+			State = 81;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__6) {
+			while (_la==T__7) {
 				{
 				{
-				State = 66;
-				Match(T__6);
-				State = 67;
+				State = 77;
+				Match(T__7);
+				State = 78;
 				tok();
 				}
 				}
-				State = 72;
+				State = 83;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -596,12 +665,12 @@ public partial class HawkParser : Parser {
 	[RuleVersion(0)]
 	public TokContext tok() {
 		TokContext _localctx = new TokContext(Context, State);
-		EnterRule(_localctx, 12, RULE_tok);
+		EnterRule(_localctx, 14, RULE_tok);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 73;
+			State = 84;
 			_la = TokenStream.LA(1);
 			if ( !(_la==ID || _la==TEXT) ) {
 			ErrorHandler.RecoverInline(this);
@@ -610,29 +679,29 @@ public partial class HawkParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 76;
+			State = 87;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (_la==T__7) {
+			if (_la==T__8) {
 				{
-				State = 74;
-				Match(T__7);
-				State = 75;
+				State = 85;
+				Match(T__8);
+				State = 86;
 				Match(NUM);
 				}
 			}
 
-			State = 81;
+			State = 92;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			while (_la==T__8) {
+			while (_la==T__9) {
 				{
 				{
-				State = 78;
+				State = 89;
 				filter();
 				}
 				}
-				State = 83;
+				State = 94;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -677,13 +746,13 @@ public partial class HawkParser : Parser {
 	[RuleVersion(0)]
 	public FilterContext filter() {
 		FilterContext _localctx = new FilterContext(Context, State);
-		EnterRule(_localctx, 14, RULE_filter);
+		EnterRule(_localctx, 16, RULE_filter);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 84;
-			Match(T__8);
-			State = 85;
+			State = 95;
+			Match(T__9);
+			State = 96;
 			Match(TEXT);
 			}
 		}
@@ -699,32 +768,35 @@ public partial class HawkParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,14,88,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
-		7,7,1,0,5,0,18,8,0,10,0,12,0,21,9,0,1,0,5,0,24,8,0,10,0,12,0,27,9,0,1,
-		1,1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,3,2,38,8,2,1,3,1,3,4,3,42,8,3,11,3,12,
-		3,43,1,3,1,3,5,3,48,8,3,10,3,12,3,51,9,3,1,4,1,4,4,4,55,8,4,11,4,12,4,
-		56,1,4,1,4,5,4,61,8,4,10,4,12,4,64,9,4,1,5,1,5,1,5,5,5,69,8,5,10,5,12,
-		5,72,9,5,1,6,1,6,1,6,3,6,77,8,6,1,6,5,6,80,8,6,10,6,12,6,83,9,6,1,7,1,
-		7,1,7,1,7,0,0,8,0,2,4,6,8,10,12,14,0,1,1,0,12,13,91,0,19,1,0,0,0,2,28,
-		1,0,0,0,4,37,1,0,0,0,6,39,1,0,0,0,8,52,1,0,0,0,10,65,1,0,0,0,12,73,1,0,
-		0,0,14,84,1,0,0,0,16,18,3,2,1,0,17,16,1,0,0,0,18,21,1,0,0,0,19,17,1,0,
-		0,0,19,20,1,0,0,0,20,25,1,0,0,0,21,19,1,0,0,0,22,24,3,4,2,0,23,22,1,0,
-		0,0,24,27,1,0,0,0,25,23,1,0,0,0,25,26,1,0,0,0,26,1,1,0,0,0,27,25,1,0,0,
-		0,28,29,5,12,0,0,29,30,5,1,0,0,30,31,3,4,2,0,31,32,5,2,0,0,32,3,1,0,0,
-		0,33,38,3,10,5,0,34,38,3,6,3,0,35,38,3,8,4,0,36,38,5,10,0,0,37,33,1,0,
-		0,0,37,34,1,0,0,0,37,35,1,0,0,0,37,36,1,0,0,0,38,5,1,0,0,0,39,41,5,3,0,
-		0,40,42,3,4,2,0,41,40,1,0,0,0,42,43,1,0,0,0,43,41,1,0,0,0,43,44,1,0,0,
-		0,44,45,1,0,0,0,45,49,5,4,0,0,46,48,3,14,7,0,47,46,1,0,0,0,48,51,1,0,0,
-		0,49,47,1,0,0,0,49,50,1,0,0,0,50,7,1,0,0,0,51,49,1,0,0,0,52,54,5,5,0,0,
-		53,55,3,4,2,0,54,53,1,0,0,0,55,56,1,0,0,0,56,54,1,0,0,0,56,57,1,0,0,0,
-		57,58,1,0,0,0,58,62,5,6,0,0,59,61,3,14,7,0,60,59,1,0,0,0,61,64,1,0,0,0,
-		62,60,1,0,0,0,62,63,1,0,0,0,63,9,1,0,0,0,64,62,1,0,0,0,65,70,3,12,6,0,
-		66,67,5,7,0,0,67,69,3,12,6,0,68,66,1,0,0,0,69,72,1,0,0,0,70,68,1,0,0,0,
-		70,71,1,0,0,0,71,11,1,0,0,0,72,70,1,0,0,0,73,76,7,0,0,0,74,75,5,8,0,0,
-		75,77,5,11,0,0,76,74,1,0,0,0,76,77,1,0,0,0,77,81,1,0,0,0,78,80,3,14,7,
-		0,79,78,1,0,0,0,80,83,1,0,0,0,81,79,1,0,0,0,81,82,1,0,0,0,82,13,1,0,0,
-		0,83,81,1,0,0,0,84,85,5,9,0,0,85,86,5,13,0,0,86,15,1,0,0,0,10,19,25,37,
-		43,49,56,62,70,76,81
+		4,1,14,99,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,7,
+		7,7,2,8,7,8,1,0,5,0,20,8,0,10,0,12,0,23,9,0,1,0,5,0,26,8,0,10,0,12,0,29,
+		9,0,1,1,1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,2,3,2,40,8,2,1,3,1,3,5,3,44,8,3,
+		10,3,12,3,47,9,3,1,3,1,3,1,4,1,4,4,4,53,8,4,11,4,12,4,54,1,4,1,4,5,4,59,
+		8,4,10,4,12,4,62,9,4,1,5,1,5,4,5,66,8,5,11,5,12,5,67,1,5,1,5,5,5,72,8,
+		5,10,5,12,5,75,9,5,1,6,1,6,1,6,5,6,80,8,6,10,6,12,6,83,9,6,1,7,1,7,1,7,
+		3,7,88,8,7,1,7,5,7,91,8,7,10,7,12,7,94,9,7,1,8,1,8,1,8,1,8,1,45,0,9,0,
+		2,4,6,8,10,12,14,16,0,1,1,0,12,13,102,0,21,1,0,0,0,2,30,1,0,0,0,4,39,1,
+		0,0,0,6,41,1,0,0,0,8,50,1,0,0,0,10,63,1,0,0,0,12,76,1,0,0,0,14,84,1,0,
+		0,0,16,95,1,0,0,0,18,20,3,2,1,0,19,18,1,0,0,0,20,23,1,0,0,0,21,19,1,0,
+		0,0,21,22,1,0,0,0,22,27,1,0,0,0,23,21,1,0,0,0,24,26,3,4,2,0,25,24,1,0,
+		0,0,26,29,1,0,0,0,27,25,1,0,0,0,27,28,1,0,0,0,28,1,1,0,0,0,29,27,1,0,0,
+		0,30,31,5,12,0,0,31,32,5,1,0,0,32,33,3,4,2,0,33,34,5,2,0,0,34,3,1,0,0,
+		0,35,40,3,12,6,0,36,40,3,8,4,0,37,40,3,10,5,0,38,40,3,6,3,0,39,35,1,0,
+		0,0,39,36,1,0,0,0,39,37,1,0,0,0,39,38,1,0,0,0,40,5,1,0,0,0,41,45,5,3,0,
+		0,42,44,9,0,0,0,43,42,1,0,0,0,44,47,1,0,0,0,45,46,1,0,0,0,45,43,1,0,0,
+		0,46,48,1,0,0,0,47,45,1,0,0,0,48,49,5,3,0,0,49,7,1,0,0,0,50,52,5,4,0,0,
+		51,53,3,4,2,0,52,51,1,0,0,0,53,54,1,0,0,0,54,52,1,0,0,0,54,55,1,0,0,0,
+		55,56,1,0,0,0,56,60,5,5,0,0,57,59,3,16,8,0,58,57,1,0,0,0,59,62,1,0,0,0,
+		60,58,1,0,0,0,60,61,1,0,0,0,61,9,1,0,0,0,62,60,1,0,0,0,63,65,5,6,0,0,64,
+		66,3,4,2,0,65,64,1,0,0,0,66,67,1,0,0,0,67,65,1,0,0,0,67,68,1,0,0,0,68,
+		69,1,0,0,0,69,73,5,7,0,0,70,72,3,16,8,0,71,70,1,0,0,0,72,75,1,0,0,0,73,
+		71,1,0,0,0,73,74,1,0,0,0,74,11,1,0,0,0,75,73,1,0,0,0,76,81,3,14,7,0,77,
+		78,5,8,0,0,78,80,3,14,7,0,79,77,1,0,0,0,80,83,1,0,0,0,81,79,1,0,0,0,81,
+		82,1,0,0,0,82,13,1,0,0,0,83,81,1,0,0,0,84,87,7,0,0,0,85,86,5,9,0,0,86,
+		88,5,11,0,0,87,85,1,0,0,0,87,88,1,0,0,0,88,92,1,0,0,0,89,91,3,16,8,0,90,
+		89,1,0,0,0,91,94,1,0,0,0,92,90,1,0,0,0,92,93,1,0,0,0,93,15,1,0,0,0,94,
+		92,1,0,0,0,95,96,5,10,0,0,96,97,5,13,0,0,97,17,1,0,0,0,11,21,27,39,45,
+		54,60,67,73,81,87,92
 	};
 
 	public static readonly ATN _ATN =

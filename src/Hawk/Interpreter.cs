@@ -74,6 +74,11 @@ public class Interpreter : HawkBaseVisitor<string>
         return buf.ToString();
     }
 
+    public override string VisitEscaped(HawkParser.EscapedContext context)
+    {
+        return context.GetText().Trim('"');
+    }
+
     /// <summary>
     /// Evaluates a definition and stores it in the local environment.
     /// </summary>

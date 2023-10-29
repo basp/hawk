@@ -7,8 +7,10 @@ def         : ID ':' pattern ';' ;
 pattern     : toklist
             | parens   
             | brackets
-            | ESC
+            | escaped
             ;
+
+escaped     : '"' .*? '"' ;
 
 parens      : '(' pattern+ ')' filter* 
             ;
@@ -21,8 +23,13 @@ tok         : (TEXT | ID) ('*' NUM)? filter*
 filter      : '^' TEXT 
             ;
 
-ESC         : '"' .*? '"' ;
 NUM         : [1-9][0-9]* ;
 ID          : [A-Z] ;
-TEXT        : [a-z][a-z]* ;
+TEXT        : CHAR+ ;
 WS          : [ \t\r\n] -> skip ;
+
+fragment CHAR        
+            : 'a'..'z'
+            | '\''
+            | [\u00C0-\uFEFC]
+            ;

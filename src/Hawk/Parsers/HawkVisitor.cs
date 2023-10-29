@@ -49,6 +49,12 @@ public interface IHawkVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitPattern([NotNull] HawkParser.PatternContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="HawkParser.escaped"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEscaped([NotNull] HawkParser.EscapedContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="HawkParser.parens"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
